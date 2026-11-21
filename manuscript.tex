@@ -1,0 +1,156 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1.04in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,microtype}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\DeclareMathOperator{\per}{per}
+\DeclareMathOperator{\Var}{Var}
+\newcommand{\E}{\mathbb E}
+\newcommand{\ket}[1]{\lvert #1\rangle}
+\newcommand{\bra}[1]{\langle #1\rvert}
+\title{Exponential variance of paired determinant estimates\\for optical circuit readout}
+\author{Daniel Fredriksen\\{\small Quantyra Inc., Las Vegas, Nevada, USA}\\
+{\small\href{https://orcid.org/0009-0002-9123-7435}{ORCID 0009-0002-9123-7435}}}
+\date{November 21, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+A real quantum circuit's acceptance probability can be written as a derivative of a permanent by marking one rail of a postselected linear-optical circuit. Two determinants using the same random entry signs give an unbiased estimate of this derivative. We construct connected optical circuits on which its normalized variance grows exponentially for every positive entry weighting fixed before sampling. Removing any one of the central controlled-sign gates reverses the promised decision. The proof identifies alternating cycles in triples of gates and computes the mean optical amplitude left after their vertices are removed. A second family uses independently prepared controls. Both families have elementary classical decision algorithms. The lower bound concerns the mean-square error of this particular sampling method.
+\end{abstract}
+
+\section{An estimator for a marked rail}
+Two uses of the permanent suggest a simulation method. An optical circuit can encode a quantum amplitude as a permanent. Separately, two determinants with common random signs cancel unequal permutations in expectation. Could this cancellation control the fluctuations when the desired quantity is just the probability of one output bit? We give a family on which it fails in mean square even after optimizing the entry weights.
+
+The optical encoding uses the nonlinear-sign device of Knill, Laflamme and Milburn \cite{klm} in the form of Aaronson's Theorem~3 \cite{aaronson}. The random determinant method goes back to Godsil and Gutman \cite{gg}. Karmarkar et al.\ study relative approximation for zero-one permanents \cite{kklll}. Chien, Rasmussen and Sinclair analyze the second moment using permutation cycles and give a repeated-block example \cite[Secs.~3.2--3.3]{crs}. Michels studies determinant estimators and importance sampling for complex permanents in boson sampling \cite[Sec.~4]{michels}. Our question concerns a derivative on the restricted matrices produced by an optical compiler. A witness must survive the derivative and the known herald normalization. Connectedness excludes a product of independent optical components, and deleting any one of the central gates in our main example changes the decision.
+
+Let \(C\) be a real circuit with basis input \(j\), and let \(p\) be its probability of measuring the target qubit as one. Use dual rails (one photon per qubit) and compile the forward and reverse logical circuits with fresh auxiliary photons. A \emph{herald} is an auxiliary port on which a prescribed photon count selects a successful operation. Between the two circuits give the measured one rail a factor \(z\). Selecting the occupied input columns and output rows gives a normalized matrix \(M(z)\). Since a single mode between two fixed networks was changed,
+\[
+ M(z)=A+(z-1)D,\qquad \operatorname{rank}D\le1.
+\]
+On complete herald success the target has one photon across its two rails. The collision-free return amplitude is consequently
+\begin{equation}
+ \per M(z)=\bra j C^\mathsf T[I+(z-1)\ket1\!\bra1_{\rm target}]C\ket j
+          =1+(z-1)p. \label{eq:mark}
+\end{equation}
+Here the projector acts as the identity on other qubits. The phase construction proves the identity for \(|z|=1\), which suffices for the polynomial identity.
+
+Choose finite positive \(B_e\) on the union of the supports of \(A,D\), allowing a separate choice per entry and per circuit. Hold \(B\) fixed in \(z\) and independently of the sign draw. Give each supported entry one independent uniform sign \(S_e\). With entrywise products and ratios, zero on absent edges, set
+\[
+ P=S\circ B,\quad Q=S\circ(A/B),\quad V=S\circ(D/B),\qquad
+ Y=\det(P)\left.\frac{d}{dz}\det(Q+(z-1)V)\right|_{z=1}.
+\]
+The derivative is a cofactor sum, so singular draws are included. Expanding both determinants, equal permutations contribute their unsigned \(M(z)\)-weight. All other pairs have a sign occurring once and average to zero. Hence \(\E Y=p\).
+
+\begin{theorem}\label{thm:main}
+For every positive odd \(r\) there is an explicit circuit on \(n+1\) qubits, \(n=3r\), with \(n\) central controlled-sign gates on a common target. Its occupied optical support is connected. For every admissible \(B\), on target input zero,
+\[
+ \Var Y\ \ge\ (25/338)^2\, [\,8(1-\sqrt2)^2\,]^r .
+\]
+The base is \(1.372583\ldots\). On this input the acceptance probability is \(25/169\), and deleting any one central gate raises it to \(1\). On target input one those probabilities are \(144/169\) and \(0\), respectively. The variance bound concerns the normalized estimator on input zero. Equivalently its variance divided by its squared mean is at least \([8(1-\sqrt2)^2]^r/4\), also for the corresponding physical-matrix estimator.
+\end{theorem}
+
+The randomness in \(Y\) comes from a classical draw of entry signs. A run of the optical experiment instead produces photon counts. We use the optical circuit to specify the matrix on which the classical estimator is tested.
+
+\section{A cycle expansion}
+Use separate row and column vertices for the occupied ports. The symmetric difference of two permutation matchings is a union \(H_0\) of vertex-disjoint alternating cycles. For a cycle \(K\) of length \(2k\), let \(E,F\) denote its alternating edge sets. With \(B_E=\prod_{e\in E}B_e\) and \(M_E(z)=\prod_{e\in E}M_e(z)\), put
+\[
+ w_K(z)=(-1)^{k-1}\left[B_E\,M_F(z)/B_F+B_F\,M_E(z)/B_E\right].
+\]
+Write \(M_{\bar H_0}\) for the matrix after deleting the incident rows and columns.
+\begin{lemma}\label{lem:cycles}
+The coefficient of the sign product \(\prod_{e\in H_0}S_e\) in \(Y\) is
+\[
+ d_{H_0}=\left.\frac{d}{dz}
+     \left(\per M(z)_{\bar H_0}\prod_{K\text{ component of }H_0}w_K(z)\right)\right|_{z=1}.
+\]
+In particular, \(\Var Y=\sum_{H_0\ne\varnothing}d_{H_0}^2\), summed over distinct cycle masks.
+\end{lemma}
+\begin{proof}
+On each cycle there are two ways to assign the alternating edges to the two determinants. Their relative permutation has sign \((-1)^{k-1}\) in either case. On the remaining vertices both matchings coincide. Their entry factors multiply to \(M_e(z)\) and their permutation signs cancel there. Summing the common matching gives the complementary permanent, including its value one for an empty matrix. Different products of independent signs are orthogonal. The empty mask contributes the mean in \eqref{eq:mark}.
+\end{proof}
+
+\section{Eight masks per triple of gates}
+Set \(s=\sqrt2\), \(a=1-s\), and \(H=s^{-1}\left(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\right)\). At each controlled sign, first apply \(H\) on the target-one and control-one rails. Apply one device \(L=\left(\begin{smallmatrix}a&1\\s&1\end{smallmatrix}\right)\) on each resulting arm and its own fresh herald, then apply \(H\) again. Rows are outputs and the herald is the second port of \(L\). With one herald photon at both endpoints its data amplitudes for \(m=0,1,2\) are \(1,1,-1\): for \(m\ge1\) the amplitude is \(a^m+ms a^{m-1}\). Two active input photons bunch under \(H\), giving precisely the controlled sign. In the physical device the occupied two-mode block has data diagonal \(a\), cross entries \(2^{-1/4}\), and herald diagonal \(1/2\) \cite{aaronson}. Multiplying its herald column by \(2^{1/4}\) and row by \(2^{3/4}\) gives \(L\). Each herald port is used once, so the physical return permanent is \(4^{-g}\per M(z)\) for \(g\) controlled signs in the whole reflected circuit. For row and column scalings \(R_i,C_j>0\), transport the weights as \(B_{ij}\mapsto\sqrt{R_i C_j}\,B_{ij}\). Both determinants acquire the same square-root scale factor. This bijection on weight choices gives \(Y_{\rm norm}=4^gY_{\rm phys}\) on each sign draw.
+
+For classical draws on the physical submatrix, the mean and variance scale as \(4^{-g}p\) and \(16^{-g}\Var(Y)\), respectively. For \(p>0\) the ratio of the variance to the squared mean is invariant. Each of the \(2g\) nonlinear-sign devices in the reflected circuit supplies amplitude \(1/2\). Their product is the herald amplitude \(h=(1/2)^{2g}=4^{-g}\), with herald success probability \(|h|^2=16^{-g}\) on the logical circuit at \(z=1\). The estimator differentiates an amplitude, so \(Y_{\rm phys}/h\) has mean \(p\).
+
+Rotate the target by \(U\), prepare \(n\) control qubits (the leaves), apply one controlled sign with each leaf in order, and rotate the target by \(T\) before readout. Denote \(U_{10}=u>0\) for target input zero. The shared target-one rail enters each central splitter first. A herald column emits \(1/s\) onto this rail. The data-to-data block of a complete gate on the two active rails is \(H(aI)H=aI\). Thus a central forward herald row at gate \(j\) receives \(u a^{j-1}\) from the target input. From either herald at gate \(i<j\) it receives \(a^{j-i-1}/s\): the emitted leaf amplitude cannot reach a later central forward gate. Each herald diagonal is one. All these rows precede the marked rail, so their \(D\) entries vanish.
+
+Choose one herald arm at each central forward gate. In a triple let \(v_1,v_2,v_3\) be the chosen heralds, and let \(v_0\) be the preceding terminal herald or, for the first triple, the target input. With arrows from column to row, take both matchings
+\[
+\begin{array}{ccc}
+ v_0\to v_3 & v_1\to v_1 & v_2\to v_2\\
+ v_0\to v_1 & v_1\to v_2 & v_2\to v_3 .
+\end{array}
+\]
+They form a six-edge cycle. A triple uses its terminal herald as a row, and the next uses that label as a column. Thus the cycles have disjoint bipartite vertices. Their rows recover the chosen arms and give \(2^{3r}\) distinct masks.
+
+The products of \(A\)-entries in the two matchings are \(ua^2,u/s^2\) in the first triple and \(a^2/s,1/s^3\) thereafter. Both products are positive. For the two oriented terms \(x,y\) in \(w_K\), \(xy=\prod_{e\in K}A_e\) for every choice of \(B\). Hence \(w_K^2\ge4xy\), and \(w'_K=0\). Multiplying these lower bounds gives \((su)^2(a^2)^r\) per mask. Let \(F_\alpha\) be the derivative of the complementary permanent at \(1\) for arm list \(\alpha\). Lemma~\ref{lem:cycles} and the mean-square inequality give
+\begin{equation}
+ \Var Y\ \ge\ (su)^2(8a^2)^r\,|\E_\alpha F_\alpha|^2, \label{eq:bound}
+\end{equation}
+where the arm choices are uniform and independent. Computing \(\E_\alpha F_\alpha\) is essential because the complementary amplitude has a sign.
+
+\section{The amplitude left by a mask}
+The deleted columns remove the target input photon and the chosen herald inputs at gates \(1,\ldots,n-1\). The deleted rows remove the chosen herald outputs at all \(n\) gates. Deleting an occupied endpoint in a collision-free permanent places vacuum there in the corresponding Fock amplitude. All other gates and endpoints remain. The phase derivative inserts the number operator on the measured rail. Initially both target rails are empty. The following one-gate average leaves them empty until the final injection; induction therefore restricts each of the first \(n-1\) averaged steps to zero or one incoming active photon.
+
+Independent arm choices can be averaged one gate at a time inside this amplitude by linearity. Before the last central gate, the chosen device now has vacuum at both herald endpoints, so it acts on \(m\) arm photons by \(a^m\). The other device retains its original herald. In the one-photon sector, before undoing the splitter the two choices act as \(\operatorname{diag}(a,1)\) or \(\operatorname{diag}(1,a)\). Their average multiplies a single leaf-one photon by \(\lambda=(1+a)/2\), leaving the target empty. Vacuum is preserved. This calculation applies to each leaf basis component, including leaves entangled by their preparation.
+
+At the last gate the chosen device has one input herald and vacuum output. In its arm it sends \(\ket m\) to \(\sqrt{m+1}\,a^m\ket{m+1}\). Exchanging the choice of arm conjugates the gate by a sign flip of the leaf-one rail, so the average preserves leaf occupation parity. Vacuum input therefore gives one target photon with coefficient \(1/s\). A single leaf-one input must give one photon on each active rail. For injection on the first arm, the input in arm coordinates is \((\ket{10}-\ket{01})/s\) and the desired output is \((\ket{20}-\ket{02})/s\). Only the first component contributes, with transition amplitude \(a/s\); the exchanged arm gives the same result. The leaf-zero rails are untouched. Thus the averaged forward complement returns to the dual-rail sector with target one and with multiplier \(s^{-1}\lambda^{\sum_{i<n}x_i}a^{x_n}\) on leaf string \(x\). Individual choices need not do so.
+
+Write \(\mu(x)\) for the basis probabilities of the pure prepared leaf state, and \(R=T^\mathsf T\ket1\!\bra1 T\). On the averaged state the measured number operator acts as the ordinary one-rail projector. The reverse controlled signs apply \((-1)^{|x|}\) on the target-one component, and reverse preparation supplies the initial leaf bra. Consequently
+\begin{equation}
+ \E_\alpha F_\alpha=\frac1s\sum_x \mu(x)\lambda^{\sum_{i<n}x_i}a^{x_n}
+       [\,U_{00}R_{01}+(-1)^{|x|}U_{10}R_{11}\,]. \label{eq:complement}
+\end{equation}
+Complementary permanents occur in the proof only. A sample uses determinants of matrices constructed from the gates.
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Take \(U=T=s^{-1}\left(\begin{smallmatrix}1&-1\\1&1\end{smallmatrix}\right)\). Prepare \((5\ket{0^n}+12\ket{1^n})/13\) by a seed rotation and \(n-1\) CNOTs from the seed, each made from a controlled sign and two Hadamards on its target. The seed is the first leaf in the central sequence. For odd \(n\), target input zero accepts with certainty on the all-zero branch and with probability zero on the all-one branch. Deleting any central gate makes the parity even and both branches accept. The complementary statements hold on target input one. In \eqref{eq:complement} the bracket vanishes on the odd all-one branch. The all-zero branch gives \(\E_\alpha F_\alpha=25/338\). As \(su=1\), \eqref{eq:bound} proves the bound.
+
+For completeness consider the support of \(A=M(1)\), with a vertex for each occupied row or column and an edge for each nonzero entry. The target input meets both rows of every central forward pair, each joined to its own column. The last forward pair reaches the corresponding first reverse pair since \(T^\mathsf TT=I\); successive reverse pairs are joined by transmission on the shared target rail. The last reverse pair reaches the target output. In forward fanout preparation put the seed first in each splitter. Its input reaches both herald rows at every preparation gate since the seed-one amplitude is multiplied by the nonzero \(a\) at each traversal. Each fresh Hadamard-rotated leaf input reaches its own pair. Each preparation herald injects onto the seed, which reaches the first central pair. The transpose connections attach the reverse preparation and every leaf output: at \(z=1\) reversing the order transposes physical support, with forward and reverse herald labels exchanged, since each physical device is symmetric and each rotation is reversed. Positive normalization preserves support. This covers every occupied vertex. The whole reflected circuit has \(g=2(2n-1)\) controlled signs and \(n+1+2g=9n-3\) occupied ports. The compiled family has \(O(n\log n)\) explicitly indexed description bits.
+\end{proof}
+
+The dimension \(N=9n-3\) counts one selected input and output per photon. In the physical compiler with fresh ancillas there are \(2(n+1)+4g\) spatial modes: two rails per logical qubit and, per controlled sign, two occupied heralds and two auxiliary vacuum modes.
+
+\section{Independent controls and exact checks}
+The same growth mechanism also applies without entangled input preparation. Give each leaf one-amplitude \(40/401\) and zero-amplitude \(399/401\). Put \(q=(40/401)^2\). Take \(U=T=\left(\begin{smallmatrix}c&-t\\t&c\end{smallmatrix}\right)\), \(c=77/85,\ t=36/85\). Then \(p_0=2c^2t^2[1+(1-2q)^n]\), and \(p_1=1-p_0\), by averaging the control parity. For \(n\ge150\), \(p_0<1/3\). Every leaf input and output attaches through its own rotation to the connected central pairs. The product law in \eqref{eq:complement} gives
+\[
+ \E_\alpha F_\alpha=\frac{tc^2}{s}\big[(1-q+\lambda q)^{n-1}(1-q+aq)
+                         +(1-q-\lambda q)^{n-1}(1-q-aq)\big].
+\]
+Both summands are positive. Keeping the first in \eqref{eq:bound} gives a constant times
+\([8a^2(1-q+\lambda q)^6]^r\) as a lower bound for \(n=3r\).
+Its base exceeds \(1.31\): \(8a^2>48/35\), \(q<1/100\), \(1-\lambda=1/\sqrt2<5/7\), and \((1-y)^6\ge1-6y\). Here deleting one gate changes \(p_0\) by \(4c^2t^2q(1-2q)^{n-1}\), which decays with \(n\).
+
+The accompanying Python checks use rational arithmetic in \(\mathbb Q(\sqrt2)\). For a separate three-qubit check, prepare one control in \(\ket1\) and the other in \((12\ket0+5\ket1)/13\). Starting with target \(\ket b\), apply in order the first controlled sign, a target Hadamard, the second controlled sign, and another target Hadamard. The program checks \eqref{eq:mark} at five values of \(z\) and computes the entire second moment using four determinant copies. It sums the terms with even sign multiplicity in every entry and extracts the derivative in each of two independent marking variables. For \(B_e=\sqrt{\max(|A_e|,|D_e|)}\), the results are
+\[
+\begin{array}{c@{\qquad}c@{\qquad}r}
+b & p_b & \Var Y\ \text{(rounded)}\\ \hline
+0&25/169&419.484581\\
+1&144/169&363.480837 .
+\end{array}
+\]
+A second program builds both complete \(n=3\) optical families, checks connectedness, and differentiates each of the eight complementary permanents directly. It recovers \(25/338\) for the entangled preparation and \(0.476986875610\ldots\) for the product preparation. On the \(n=9\) entangled circuit it also verifies connectedness across 78 occupied ports and checks all 512 distinct masks, including the alternating products and row/column disjointness at both inter-triple boundaries. This last check tests the geometry without computing a 78-port permanent.
+
+\section{Consequence for averaging}
+For \(m\) independent draws the unbiased sample mean has mean-square error \(\Var(Y)/m\). Theorem~\ref{thm:main} therefore excludes a uniform polynomial mean-square guarantee even if the entry weights may depend on the full circuit. The ordinary balanced choice above requires at most \(N^2\) random signs and \(O(N^5)\) arithmetic operations by direct cofactor evaluation at \(N\) occupied ports. For these fixed algebraic gates the entries of \(A,D\) in a fixed number field have polynomial bit length; nonzero masses are bounded below by \(2^{-\mathrm{poly}(n)}\) by their algebraic norms. Dyadic approximations of polynomial bit length suffice for fixed absolute sample error: with entries bounded by \(K\ge1\) and entry errors \(\delta\le1\), expansion as \(N\) column replacements and telescoping each product bound the error in \(Y\) by \(2N^2(N!)^2(K+1)^{2N-1}\delta\). A uniformly bounded absolute perturbation changes the standard deviation by at most that bound on sample error.
+
+In particular \(O(N\log N+N\log(K+1)+\log(1/\epsilon))\) fractional bits of the sampled entries suffice for output error \(\epsilon\) (for \(0<\epsilon<1\)). Dyadic determinants can then be evaluated by fraction-free elimination. This worst-case sufficient precision can exceed ordinary machine precision and gives no lower bound on the precision a particular draw needs.
+
+Both witnesses have simple parity-based classical decision formulas. An algorithm that uses those formulas can avoid sampling altogether. The probability that polynomially many draws attain a specified additive accuracy is a separate tail question. The variance theorem leaves ordinary BPP versus BQP open.
+
+\paragraph{Reproducibility and disclosure.} The \href{https://github.com/Quantyra/optical-determinant-variance}{companion repository} contains the source and exact checks. AI tools assisted in mathematical development, drafting and automated review.
+
+\begin{thebibliography}{9}
+\bibitem{gg} C. D. Godsil and I. Gutman, ``On the matching polynomial of a graph,'' in \emph{Algebraic Methods in Graph Theory}, Vol.~I, Colloquia Mathematica Societatis J\'anos Bolyai 25, 241--249 (1981).
+\bibitem{kklll} N. Karmarkar, R. Karp, R. Lipton, L. Lov\'asz and M. Luby, ``A Monte-Carlo algorithm for estimating the permanent,'' \emph{SIAM J. Comput.} 22, 284--293 (1993). \href{https://doi.org/10.1137/0222021}{doi:10.1137/0222021}.
+\bibitem{crs} S. Chien, L. Rasmussen and A. Sinclair, ``Clifford algebras and approximating the permanent,'' \emph{J. Comput. Syst. Sci.} 67, 263--290 (2003). \href{https://people.eecs.berkeley.edu/~sinclair/clifford.pdf}{Author manuscript}.
+\bibitem{klm} E. Knill, R. Laflamme and G. J. Milburn, ``A scheme for efficient quantum computation with linear optics,'' \emph{Nature} 409, 46--52 (2001). \href{https://doi.org/10.1038/35051009}{doi:10.1038/35051009}.
+\bibitem{aaronson} S. Aaronson, ``A linear-optical proof that the permanent is \#P-hard,'' \emph{Proc. R. Soc. A} 467, 3393--3405 (2011). \href{https://arxiv.org/abs/1109.1674}{arXiv:1109.1674}.
+\bibitem{michels} D. Michels, \emph{The Sign Problem in Boson Sampling}, bachelor's thesis, RWTH Aachen University (2016), Sec.~4. \href{https://www.rwth-aachen.de/global/show_document.asp?id=aaaaaaaaaarxnkh}{University copy}.
+\end{thebibliography}
+\end{document}

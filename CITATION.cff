@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "Please cite the preprint when using this result."
+title: "Exponential variance of paired determinant estimates for optical circuit readout"
+authors:
+  - family-names: Fredriksen
+    given-names: Daniel
+    affiliation: "Quantyra Inc."
+    orcid: "https://orcid.org/0009-0002-9123-7435"
+version: "1.0.0"
+license: CC-BY-4.0
+repository-code: "https://github.com/Quantyra/optical-determinant-variance"

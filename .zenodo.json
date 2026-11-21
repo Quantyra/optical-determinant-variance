@@ -1,0 +1,39 @@
+{
+  "title": "Exponential variance of paired determinant estimates for optical circuit readout",
+  "upload_type": "publication",
+  "publication_type": "preprint",
+  "description": "A shared-sign pair of determinants estimates a normalized optical-circuit acceptance probability without bias. On an explicit family of connected circuits its variance grows exponentially for every positive entry weighting fixed before sampling. Deleting any single central controlled-sign gate changes the promised decision. The proof computes the optical amplitude on the complement of alternating cycles. A second construction uses independent controls. Both decision families are classically tractable.",
+  "creators": [
+    {
+      "name": "Fredriksen, Daniel",
+      "affiliation": "Quantyra Inc.",
+      "orcid": "0009-0002-9123-7435"
+    }
+  ],
+  "license": "CC-BY-4.0",
+  "version": "1.0.0",
+  "keywords": [
+    "permanent",
+    "random determinant",
+    "Monte Carlo variance",
+    "linear optics",
+    "quantum circuit simulation"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.48550/arXiv.1109.1674",
+      "scheme": "doi",
+      "relation": "references"
+    },
+    {
+      "identifier": "10.1137/0222021",
+      "scheme": "doi",
+      "relation": "references"
+    },
+    {
+      "identifier": "10.1038/35051009",
+      "scheme": "doi",
+      "relation": "references"
+    }
+  ]
+}
