@@ -2,6 +2,8 @@
 
 Daniel Fredriksen, Quantyra Inc. · [Manuscript PDF](manuscript.pdf) · [LaTeX source](manuscript.tex) · [ORCID](https://orcid.org/0009-0002-9123-7435)
 
+**Cite version 1.0.0.** [Zenodo DOI 10.5281/zenodo.24430932](https://doi.org/10.5281/zenodo.24430932) · [All versions](https://doi.org/10.5281/zenodo.24430931)
+
 This preprint gives a connected family of optical circuits on which an unbiased, shared-sign determinant estimate of a one-bit acceptance probability has exponential variance. The bound holds for every positive entry weighting fixed before sampling. Deleting any one central controlled-sign gate reverses the promised decision. A companion family uses independent control preparations. Both families admit efficient classical decision algorithms.
 
 ## Exact checks

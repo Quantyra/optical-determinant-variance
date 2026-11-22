@@ -7,5 +7,6 @@ authors:
     affiliation: "Quantyra Inc."
     orcid: "https://orcid.org/0009-0002-9123-7435"
 version: "1.0.0"
+doi: "10.5281/zenodo.24430932"
 license: CC-BY-4.0
 repository-code: "https://github.com/Quantyra/optical-determinant-variance"
